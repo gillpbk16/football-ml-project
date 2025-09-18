@@ -123,3 +123,91 @@ def create_train_test_split(match_data, train_seasons, test_seasons):
     test_data = match_data[match_data['Season'].isin(test_seasons)].copy()
     
     return train_data, test_data
+
+
+def extract_odds_data(df_list):
+    odds_dfs = []
+    for dfs in df_list:
+        df = dfs['dataframe']
+        season = dfs['season']
+
+        df = df[["Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "B365H", "B365D", "B365A"]].copy()
+        df["Date"] = pd.to_datetime(df["Date"], dayfirst = True, errors = "coerce")
+        df["FTHG"] = pd.to_numeric(df["FTHG"], errors="coerce")
+        df["FTAG"] = pd.to_numeric(df["FTAG"], errors="coerce")
+
+        df["B365H"] = pd.to_numeric(df["B365H"], errors="coerce")
+        df["B365D"] = pd.to_numeric(df["B365D"], errors="coerce")
+        df["B365A"] = pd.to_numeric(df["B365A"], errors="coerce")
+        
+        
+        df = df.dropna(subset=["Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "B365H", "B365D", "B365A"])
+        df["FTHG"] = df["FTHG"].astype(int)
+        df["FTAG"] = df["FTAG"].astype(int)
+        df["Season"] = int(season)
+
+        odds_dfs.append(df)
+    return pd.concat(odds_dfs, ignore_index=True)
+
+def convert_odds_to_probs(df):
+    df = df.copy()
+
+    df['prob_home_raw'] = 1 / df['B365H']
+    df['prob_draw_raw'] = 1 / df['B365D']
+    df['prob_away_raw'] = 1 / df['B365A']
+
+    df['total_prob'] = df['prob_home_raw'] + df['prob_draw_raw'] + df['prob_away_raw']
+
+    df['prob_home'] = df['prob_home_raw'] / df['total_prob']
+    df['prob_draw'] = df['prob_draw_raw'] / df['total_prob']
+    df['prob_away'] = df['prob_away_raw'] / df['total_prob']
+
+    df = df.drop(['prob_home_raw', 'prob_draw_raw', 'prob_away_raw', 'total_prob'], axis=1)
+
+    return df
+
+def add_team_one_hot_encoding(df):
+    df = df.copy()
+    home_dummies = pd.get_dummies(df['HomeTeam'], prefix='home').astype(int)
+    away_dummies = pd.get_dummies(df['AwayTeam'], prefix='away').astype(int)
+    df_with_dummies = pd.concat([df, home_dummies, away_dummies], axis=1)
+    return df_with_dummies
+
+def load_raw_files(raw_dir):
+    files = sorted(raw_dir.glob("E0_*.csv"))
+    if not files: 
+        raise FileNotFoundError(f"No raw files found in {RAW_DIR}. Expected E0_YYYY.csv files.")
+    df_list = []
+    for f in files:
+        df = pd.read_csv(f)
+        season = f.stem.split("_")[-1]
+        df_list.append({ 'dataframe': df, 'season': season })
+    return df_list
+
+
+def save_final_dataset(train_data, test_data, match_data, processed_dir):
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    match_data.to_csv(processed_dir / "teamstats.csv", index=False)
+    train_data.to_csv(processed_dir / "train.csv", index=False)
+    test_data.to_csv(processed_dir / "test.csv", index=False)
+
+    (processed_dir / "README.md").write_text(
+        "# Processed Data\n\n"
+        "- `teamstats.csv`: one row per match with 5-match rolling features per side (shifted 1 to avoid leakage).\n"
+        "- `train.csv`, `test.csv`: split by Season lists.\n\n"
+        "## Key columns\n"
+        "- Date, HomeTeam, AwayTeam, Season, FTHG, FTAG, FTR (H/D/A)\n"
+        "- rolling features: rolling_goals_for_home/away, rolling_goals_against_home/away, "
+        "rolling_points_home/away, rolling_win_rate_home/away\n"
+    )
+
+def save_odds_dataset(train_data, test_data, match_data, processed_dir):
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    match_data.to_csv(processed_dir / "teamstats_odds.csv", index=False)
+    train_data.to_csv(processed_dir / "train_odds.csv", index=False)
+    test_data.to_csv(processed_dir / "test_odds.csv", index=False)
+
+    with open   (processed_dir / "README.md", "a") as f:
+        f.write("\n\n## Betting Odds & Team Encoding\n")
+        f.write("- `teamstats_odds.csv`: odds probabilities + team dummies\n") 
+        f.write("- `train_odds.csv`, `test_odds.csv`: train/test splits\n")
