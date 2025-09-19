@@ -1,0 +1,51 @@
+# Data paths and settings
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  train_file: "train.csv"
+  test_file: "test.csv"
+  train_odds_file: "train_odds.csv"
+  test_odds_file: "test_odds.csv"
+
+# Model training settings
+training:
+  random_state: 42
+  test_seasons: [2023, 2024]
+  train_seasons: [2020, 2021, 2022]
+  rolling_window: 5
+
+# Model configurations
+models:
+  teamstats:
+    logistic_regression:
+      solver: "lbfgs"
+      max_iter: 10000
+      use_pipeline: true
+    random_forest:
+      n_estimators: 500
+      min_samples_leaf: 2
+      use_pipeline: false
+
+  odds_teams:
+    logistic_regression:
+      solver: "lbfgs"
+      max_iter: 1000
+      use_pipeline: false
+    random_forest:
+      n_estimators: 500
+      min_samples_leaf: 2
+      use_pipeline: false
+
+# Output settings
+output:
+  models_dir: "models"
+  reports_dir: "reports"
+  version: "1.0.0"
+
+# Evaluation settings
+evaluation:
+  target_classes: ["H", "D", "A"]
+  label_mapping:
+    H: 0
+    D: 1
+    A: 2

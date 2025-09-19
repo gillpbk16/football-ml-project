@@ -2,7 +2,7 @@
   "model_info": {
     "name": "rf",
     "version": "1.0.0",
-    "trained_at": "2025-09-19T14:44:32.808262",
+    "trained_at": "2025-09-19T19:26:08.257887",
     "random_state": 42
   },
   "dataset_info": {
@@ -68,32 +68,13 @@
       "away_Wolves"
     ]
   },
-  "performance": {
-    "accuracy": 0.5421,
-    "baseline_improvement": 0.2088,
-    "f1_macro": 0.4266,
-    "precision_macro": 0.4432,
-    "log_loss": 0.9808
-  },
-  "evaluation": {
-    "confusion_matrix": [
-      [
-        246,
-        11,
-        73
-      ],
-      [
-        99,
-        6,
-        70
-      ],
-      [
-        86,
-        9,
-        160
-      ]
-    ],
-    "target_classes": [
+  "labels": {
+    "mapping": {
+      "H": 0,
+      "D": 1,
+      "A": 2
+    },
+    "class_order": [
       "H",
       "D",
       "A"

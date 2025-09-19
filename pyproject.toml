@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "football-ml"
+version = "0.1.0"
+description = "Football match prediction using machine learning"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.3.0",
+    "scikit-learn>=1.7.0",
+    "numpy>=2.3.0",
+    "joblib>=1.5.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.0",
+    "jupyter>=1.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"

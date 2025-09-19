@@ -2,7 +2,7 @@
   "model_info": {
     "name": "logreg",
     "version": "1.0.0",
-    "trained_at": "2025-09-19T14:44:32.734850",
+    "trained_at": "2025-09-19T19:26:08.179740",
     "random_state": 42
   },
   "dataset_info": {
@@ -68,32 +68,13 @@
       "away_Wolves"
     ]
   },
-  "performance": {
-    "accuracy": 0.5395,
-    "baseline_improvement": 0.2061,
-    "f1_macro": 0.4386,
-    "precision_macro": 0.4471,
-    "log_loss": 0.9768
-  },
-  "evaluation": {
-    "confusion_matrix": [
-      [
-        251,
-        23,
-        56
-      ],
-      [
-        105,
-        11,
-        59
-      ],
-      [
-        90,
-        17,
-        148
-      ]
-    ],
-    "target_classes": [
+  "labels": {
+    "mapping": {
+      "H": 0,
+      "D": 1,
+      "A": 2
+    },
+    "class_order": [
       "H",
       "D",
       "A"

@@ -2,8 +2,11 @@
 .venv/
 __pycache__/
 
-# raw data (ignore everything here)
-data/raw/*
+# raw data (keep CSVs, ignore big intermediates or Excel if any)
+!data/raw/
+!data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.zip
 
 # processed data (keep CSVs + README, ignore big intermediates if needed)
 !data/processed/
@@ -13,3 +16,18 @@ data/processed/*.parquet
 
 # notebooks
 *.ipynb_checkpoints/
+
+# Models
+models/*/*/*/*.pkl
+!models/*/*/*/metadata.json
+!models/*/*/*/metrics.json
+reports/**/*.csv
+
+# OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# backups
+backups/

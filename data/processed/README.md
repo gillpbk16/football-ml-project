@@ -8,7 +8,6 @@
 - rolling features: rolling_goals_for_home/away, rolling_goals_against_home/away, rolling_points_home/away, rolling_win_rate_home/away
 
 
-# Betting Odds & Team Encoding
+## Betting Odds & Team Encoding
 - `teamstats_odds.csv`: odds probabilities + team dummies
 - `train_odds.csv`, `test_odds.csv`: train/test splits
-

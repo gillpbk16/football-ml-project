@@ -1,0 +1,26 @@
+{
+  "teamstats_logreg": {
+    "accuracy": 0.5227,
+    "log_loss": 1.0104,
+    "f1_macro": 0.3865,
+    "baseline_improvement": 0.1893
+  },
+  "teamstats_rf": {
+    "accuracy": 0.4693,
+    "log_loss": 1.0709,
+    "f1_macro": 0.3905,
+    "baseline_improvement": 0.136
+  },
+  "odds_teams_logreg": {
+    "accuracy": 0.5395,
+    "log_loss": 0.9768,
+    "f1_macro": 0.4386,
+    "baseline_improvement": 0.2061
+  },
+  "odds_teams_rf": {
+    "accuracy": 0.5421,
+    "log_loss": 0.9808,
+    "f1_macro": 0.4266,
+    "baseline_improvement": 0.2088
+  }
+}
