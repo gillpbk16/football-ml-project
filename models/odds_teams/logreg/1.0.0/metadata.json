@@ -2,7 +2,7 @@
   "model_info": {
     "name": "logreg",
     "version": "1.0.0",
-    "trained_at": "2025-09-19T19:26:08.179740",
+    "trained_at": "2025-09-20T17:54:42.139951",
     "random_state": 42
   },
   "dataset_info": {
