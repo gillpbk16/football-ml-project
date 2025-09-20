@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Match Predictor</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+select, input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.results, .error {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.results {
+    background: #e8f5e8;
+    border: 2px solid #4caf50;
+}
+
+.error {
+    background: #ffeaea;
+    border: 2px solid #f44336;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Football Match Predictor</h1>
+        <p>Enter match details to get AI-powered predictions</p>
+        
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="homeTeam">Home Team:</label>
+                <select id="homeTeam" name="homeTeam" required>
+                    <option value="">Select home team</option>
+                    <!-- We'll populate this with JavaScript -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="awayTeam">Away Team:</label>
+                <select id="awayTeam" name="awayTeam" required>
+                    <option value="">Select away team</option>
+                    <!-- We'll populate this with JavaScript -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="probHome">Home Win Probability:</label>
+                <input type="number" id="probHome" name="probHome" 
+                       min="0" max="1" step="0.01" placeholder="0.45" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="probDraw">Draw Probability:</label>
+                <input type="number" id="probDraw" name="probDraw" 
+                       min="0" max="1" step="0.01" placeholder="0.30" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="probAway">Away Win Probability:</label>
+                <input type="number" id="probAway" name="probAway" 
+                       min="0" max="1" step="0.01" placeholder="0.25" required>
+            </div>
+            
+            <button type="submit">Get Prediction</button>
+        </form>
+        
+        <div id="results" class="results hidden">
+            <!-- Results will be displayed here -->
+        </div>
+        
+        <div id="error" class="error hidden">
+            <!-- Error messages will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        const teams = [
+            'Arsenal', 'Chelsea', 'Liverpool', 'Manchester City', 'Manchester United',
+    'Tottenham', 'Newcastle', 'Brighton', 'Aston Villa', 'West Ham',
+    'Crystal Palace', 'Fulham', 'Wolves', 'Everton', 'Brentford',
+    'Nottingham Forest', 'Luton', 'Burnley', 'Sheffield United', 'Bournemouth'
+        ];
+
+        const API_BASE_URL = 'http://localhost:8000';
+
+        function populateTeamDropdowns() {
+            const homeSelect = document.getElementById('homeTeam');
+            const awaySelect = document.getElementById('awayTeam');
+
+            teams.forEach(team => {
+                const homeOption = document.createElement('option');
+                homeOption.value = team;
+                homeOption.textContent = team;
+                homeSelect.appendChild(homeOption);
+
+                const awayOption = document.createElement('option');
+                awayOption.value = team;
+                awayOption.textContent = team;
+                awaySelect.appendChild(awayOption);    
+            });
+        }
+
+        function validateProbabilities(home, draw, away) {
+            const sum = home + draw + away;
+            return Math.abs(sum - 1.0) < 0.01;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            const resultsDiv = document.getElementById('results');
+
+            errorDiv.innerHTML = `<strong>Error:</strong> ${message}`;
+            errorDiv.classList.remove('hidden');
+            resultsDiv.classList.add('hidden');
+        }
+
+        function showResults(data) {
+            console.log('API Response:', data); // Add this debug line
+            const resultsDiv = document.getElementById('results');
+            const errorDiv = document.getElementById('error');
+
+            resultsDiv.innerHTML = `
+                <h3>Prediction Results</h3>
+                <p><strong>Model Used:</strong> ${data.model_used}</p>
+                <p><strong>Prediction:</strong> ${data.predicted_result}</p>
+                <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(1)}%</p>
+                <p><strong>Probabilities:</strong></p>
+                <ul>
+                    <li>Home Win: ${(data.probabilities["Home Win"] * 100).toFixed(1)}%</li>
+                    <li>Draw: ${(data.probabilities["Draw"] * 100).toFixed(1)}%</li>
+                    <li>Away Win: ${(data.probabilities["Away Win"] * 100).toFixed(1)}%</li>
+                </ul>
+                <p><strong>Response Time:</strong> ${data.latency_ms.toFixed(2)}ms</p>
+            `;
+            
+            resultsDiv.classList.remove('hidden');
+            errorDiv.classList.add('hidden');
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+            const homeTeam = document.getElementById('homeTeam').value;
+            const awayTeam = document.getElementById('awayTeam').value;
+            const probHome = parseFloat(document.getElementById('probHome').value);
+            const probDraw = parseFloat(document.getElementById('probDraw').value);
+            const probAway = parseFloat(document.getElementById('probAway').value);
+
+            if (homeTeam === awayTeam) {
+                showError('Home and Away teams cannot be the same');
+                return;
+            }
+
+            if (!validateProbabilities(probHome, probAway, probDraw)) {
+                showError('Probabilities must sum to 1.0');
+                return;
+            }
+
+            const requestData = {
+                home_team: homeTeam,
+                away_team: awayTeam,
+                prob_home: probHome,
+                prob_draw: probDraw,
+                prob_away: probAway
+            };
+
+            try {
+
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json()
+                    throw new Error(errorData.detail || 'API request failed')
+                }
+
+                const data = await response.json()
+                showResults(data);
+
+            } catch (error) {
+                showError(`Failed to get prediction: ${error.message}`);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTeamDropdowns();
+            document.getElementById('predictionForm').addEventListener('submit', handleSubmit);
+        });
+    </script>
+</body>
+</html>
