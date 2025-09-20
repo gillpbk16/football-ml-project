@@ -10,7 +10,7 @@ MODELS_DIR = PROJECT_ROOT / "models"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 
 # Model Configuration 
-MODEL_VERSION = "1.0.0"
+MODEL_VERSION = "1.1.0"
 LABEL_MAPPING = {"H": 0, "D": 1, "A": 2}
 TARGET_CLASSES = ["H", "D", "A"]
 RANDOM_BASELINE = 1.0 / len(TARGET_CLASSES)

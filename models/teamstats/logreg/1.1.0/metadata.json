@@ -1,0 +1,40 @@
+{
+  "model_info": {
+    "name": "logreg",
+    "version": "1.1.0",
+    "trained_at": "2025-09-21T00:01:51.694951",
+    "random_state": 42
+  },
+  "dataset_info": {
+    "name": "teamstats",
+    "feature_count": 14,
+    "features": [
+      "rolling_goals_for_home",
+      "rolling_goals_against_home",
+      "rolling_points_home",
+      "rolling_win_rate_home",
+      "rolling_goal_diff_home",
+      "rolling_form_home",
+      "rolling_clean_sheets_home",
+      "rolling_goals_for_away",
+      "rolling_goals_against_away",
+      "rolling_points_away",
+      "rolling_win_rate_away",
+      "rolling_goal_diff_away",
+      "rolling_form_away",
+      "rolling_clean_sheets_away"
+    ]
+  },
+  "labels": {
+    "mapping": {
+      "H": 0,
+      "D": 1,
+      "A": 2
+    },
+    "class_order": [
+      "H",
+      "D",
+      "A"
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "model_info": {
+    "name": "rf",
+    "version": "1.1.0",
+    "trained_at": "2025-09-21T00:01:51.855274",
+    "random_state": 42
+  },
+  "dataset_info": {
+    "name": "odds_teams",
+    "feature_count": 57,
+    "features": [
+      "prob_home",
+      "prob_draw",
+      "prob_away",
+      "home_Arsenal",
+      "home_Aston Villa",
+      "home_Bournemouth",
+      "home_Brentford",
+      "home_Brighton",
+      "home_Burnley",
+      "home_Chelsea",
+      "home_Crystal Palace",
+      "home_Everton",
+      "home_Fulham",
+      "home_Ipswich",
+      "home_Leeds",
+      "home_Leicester",
+      "home_Liverpool",
+      "home_Luton",
+      "home_Man City",
+      "home_Man United",
+      "home_Newcastle",
+      "home_Norwich",
+      "home_Nott'm Forest",
+      "home_Sheffield United",
+      "home_Southampton",
+      "home_Tottenham",
+      "home_Watford",
+      "home_West Brom",
+      "home_West Ham",
+      "home_Wolves",
+      "away_Arsenal",
+      "away_Aston Villa",
+      "away_Bournemouth",
+      "away_Brentford",
+      "away_Brighton",
+      "away_Burnley",
+      "away_Chelsea",
+      "away_Crystal Palace",
+      "away_Everton",
+      "away_Fulham",
+      "away_Ipswich",
+      "away_Leeds",
+      "away_Leicester",
+      "away_Liverpool",
+      "away_Luton",
+      "away_Man City",
+      "away_Man United",
+      "away_Newcastle",
+      "away_Norwich",
+      "away_Nott'm Forest",
+      "away_Sheffield United",
+      "away_Southampton",
+      "away_Tottenham",
+      "away_Watford",
+      "away_West Brom",
+      "away_West Ham",
+      "away_Wolves"
+    ]
+  },
+  "labels": {
+    "mapping": {
+      "H": 0,
+      "D": 1,
+      "A": 2
+    },
+    "class_order": [
+      "H",
+      "D",
+      "A"
+    ]
+  }
+}

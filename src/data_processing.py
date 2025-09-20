@@ -67,12 +67,21 @@ def add_rolling_features(df, window=5):
     g["Pts_lag"] = g.groupby("Team")["Points"].shift(1)
     g["Win_lag"] = (g["Result"] == "W").shift(1)
 
+    g["GD_lag"] = g["GF_lag"] - g["GA_lag"]
+    g["form_lag"] = g["Result"].shift(1).map({"W": 1, "D": 0, "L": -1})
+    g["clean_sheet_lag"] = (g["GA_lag"] == 0).astype(int)
+
     g["rolling_goals_for"] = g.groupby("Team")["GF_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
     g["rolling_goals_against"] = g.groupby("Team")["GA_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
     g["rolling_points"] = g.groupby("Team")["Pts_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
     g["rolling_win_rate"] = g.groupby("Team")["Win_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
 
-    return g.drop(columns=["GF_lag","GA_lag","Pts_lag","Win_lag"])
+    g["rolling_goal_diff"] = g.groupby("Team")["GD_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
+    g["rolling_form"] = g.groupby("Team")["form_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
+    g["rolling_clean_sheets"] = g.groupby("Team")["clean_sheet_lag"].rolling(window, min_periods=window).mean().reset_index(level=0, drop=True)
+
+    
+    return g.drop(columns=["GF_lag","GA_lag","Pts_lag","Win_lag","GD_lag","form_lag","clean_sheet_lag"])
 
 
 def create_match_dataset(team_features):
@@ -80,7 +89,9 @@ def create_match_dataset(team_features):
     away_records = team_features[team_features["Venue"] == "A"].copy()
 
     rolling_cols = ['rolling_goals_for', 'rolling_goals_against', 
-                   'rolling_points', 'rolling_win_rate']
+                   'rolling_points', 'rolling_win_rate',
+                   'rolling_goal_diff', 'rolling_form', 
+                   'rolling_clean_sheets' ]
     
     home_data = home_records[['Date', 'Team', 'Opponent', 'Season', 
                              'GF', 'GA', 'Points', 'Result'] + rolling_cols].copy()

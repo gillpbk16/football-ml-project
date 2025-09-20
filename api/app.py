@@ -13,6 +13,8 @@ import uuid
 import random 
 import os 
 
+from fastapi.middleware.cors import CORSMiddleware
+
 TEAMS = [
     "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton", 
     "Burnley", "Chelsea", "Crystal Palace", "Everton", "Fulham",
@@ -63,6 +65,14 @@ def get_ab_model(default_model: str) -> str:
 app = FastAPI(
     title="Football ML Project",
     version="0.1.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 @app.get("/")
