@@ -113,7 +113,6 @@ button:hover {
                 <label for="homeTeam">Home Team:</label>
                 <select id="homeTeam" name="homeTeam" required>
                     <option value="">Select home team</option>
-                    <!-- We'll populate this with JavaScript -->
                 </select>
             </div>
             
@@ -121,7 +120,6 @@ button:hover {
                 <label for="awayTeam">Away Team:</label>
                 <select id="awayTeam" name="awayTeam" required>
                     <option value="">Select away team</option>
-                    <!-- We'll populate this with JavaScript -->
                 </select>
             </div>
             
@@ -147,11 +145,9 @@ button:hover {
         </form>
         
         <div id="results" class="results hidden">
-            <!-- Results will be displayed here -->
         </div>
         
         <div id="error" class="error hidden">
-            <!-- Error messages will be displayed here -->
         </div>
     </div>
 
@@ -197,7 +193,6 @@ button:hover {
         }
 
         function showResults(data) {
-            console.log('API Response:', data); // Add this debug line
             const resultsDiv = document.getElementById('results');
             const errorDiv = document.getElementById('error');
 
