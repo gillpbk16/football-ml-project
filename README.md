@@ -4,16 +4,17 @@ ML system for predicting football match outcomes using team statistics and betti
 
 **Performance:** Best model: 54.2% accuracy (vs 33.3% random baseline)
 
-## Tech Stack
+## Tech Stack
+
 * **ML/Data:** scikit-learn, pandas, numpy
 * **API:** FastAPI, uvicorn, pydantic  
 * **Frontend:** HTML/CSS/JavaScript
 * **Testing:** pytest (19 tests)
 
 ## Data
-[Football-Data.co.uk](https://www.football-data.co.uk/) data.  
+[Football-Data.co.uk](https://www.football-data.co.uk/)
 
-## Setup 
+## Setup
 ```bash
 git clone https://github.com/gillpbk16/football-ml
 cd football-ml
